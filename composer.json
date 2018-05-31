@@ -1,0 +1,21 @@
+{
+  "name": "tomodomo/pcs-php",
+  "description": "PHP client for Publisher's Creative Systems' (PCS) SOAP API",
+  "type": "library",
+  "license": "MIT",
+  "require": {
+    "php": ">=7.0",
+    "ext-soap": "*",
+    "ext-xml": "*"
+  },
+  "homepage": "https://tomodomo.co/",
+  "authors": [
+    {
+      "name": "Chris Van Patten",
+      "homepage": "http://www.chrisvanpatten.com/"
+    }
+  ],
+  "autoload": {
+    "psr-4": { "Tomodomo\\": "src/" }
+  }
+}
