@@ -8,14 +8,14 @@ The client must be installed with Composer, as a manual VCS repository (it is no
 
 To set up the client:
 
-```
+```php
 // Create a new instance of the API client with your pubcode and API password
 $pcs = new PCS('PUBCODE', 'API password');
 ```
 
 To check if a user is active:
 
-```
+```php
 $status = $pcs->isUserActive('user@email.com', 'secret password');
 // returns true or false
 ```
