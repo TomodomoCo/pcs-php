@@ -16,6 +16,6 @@
     }
   ],
   "autoload": {
-    "psr-4": { "Tomodomo\\Client\\": "src/" }
+    "psr-4": { "Tomodomo\\PcsClient": "src/" }
   }
 }

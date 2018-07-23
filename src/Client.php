@@ -1,8 +1,8 @@
 <?php
 
-namespace Tomodomo\Client;
+namespace Tomodomo\PcsClient;
 
-class PCS
+class Client
 {
 
 	/**
@@ -161,7 +161,7 @@ class PCS
 		$header = $this->getSoapHeader('svc6CustInetAuthHeader', $args);
 
 		// Get the response
-		$response = $this->makeSoapCall('GetStatusExpDateIssRem', $header);
+		$response = $this->makeSoapCall('GetStatusAndCustInfo', $header);
 
 		return $response;
 	}
