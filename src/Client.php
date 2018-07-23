@@ -102,7 +102,13 @@ class Client
 		// Get the response
 		$response = $this->makeSoapCall('GetIssuesFromProfile', $header);
 
-		return $response['Status'] ? true : false;
+		// Check the status
+		if ($response['Status'] === 'Success') {
+			return true;
+		}
+
+		// Default to returning false
+		return false;
 	}
 
 	/**
