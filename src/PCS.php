@@ -142,6 +142,17 @@ class PCS
 	{
 		$customerNumber = $this->getCustomerNumber($email);
 
+		return $this->getUserInfoFromCustomerNumber($customerNumber);
+	}
+
+	/**
+	 * Get user info from a customer number
+	 *
+	 * @param string $customerNumber
+	 * @return array
+	 */
+	public function getUserInfoFromCustomerNumber($customerNumber)
+	{
 		$args = [
 			'CustomerInetNumber' => $customerNumber,
 		];
