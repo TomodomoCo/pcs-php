@@ -1,6 +1,6 @@
 <?php
 
-namespace Tomodomo\PcsClient;
+namespace Tomodomo\PcsPhp;
 
 class Client
 {
@@ -8,7 +8,7 @@ class Client
 	/**
 	 * @var string
 	 */
-	var $url = 'https://subscribe.pcspublink.com/WSStatus_v1_1_6/WSStatus_v1_1_6.asmx';
+	var $url = 'https://subscribe.pcspublink.com/WSStatus_v1_1_7/WSStatus_v1_1_7.asmx';
 
 	/**
 	 * @param array $pubArgs
@@ -116,9 +116,23 @@ class Client
 	 * no customer number is available
 	 *
 	 * @param string $email
-	 * @return int
+	 * @return string
 	 */
 	public function getCustomerNumber($email)
+	{
+		$numbers = $this->getCustomerNumbers($email);
+
+		// Return the first customer number for the email
+		return $numbers[0];
+	}
+
+	/**
+	 * Get all customer numbers for an email
+	 *
+	 * @param string $email
+	 * @return array
+	 */
+	public function getCustomerNumbers($email)
 	{
 		$args = [
 			'EmailAddr' => $email,
@@ -128,13 +142,23 @@ class Client
 		$header = $this->getSoapHeader('EmailAuthenticationHeader', $args);
 
 		// Get the response
-		$response = $this->makeSoapCall('GetCustomerNumberFromEmail', $header);
+		$response = $this->makeSoapCall('GetCustomerNumbersFromEmail', $header);
 
-		if (isset($response['CustomerNumber']) && is_numeric($response['CustomerNumber'])) {
-			return $response['CustomerNumber'];
+		// Skip directly to the customer numbers, maybe
+		$numbers = $response['CustomerNumbers']['Customer'] ?? [];
+
+		// If there aren't any customer numbers, return an empty array
+		if (count($numbers) < 1) {
+			throw new ClientException('No customer numbers for this email.');
 		}
 
-		return 0;
+		// Extract the customer numbers
+		$numbers = array_map(function ($number) {
+			return $number['CustomerNumber'];
+		}, $numbers);
+
+		// Return it all
+		return $numbers;
 	}
 
 	/**
