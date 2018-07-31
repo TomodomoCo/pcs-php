@@ -6,7 +6,8 @@
   "require": {
     "php": ">=7.0",
     "ext-soap": "*",
-    "ext-xml": "*"
+    "ext-xml": "*",
+    "danielstjules/stringy": "^3.1"
   },
   "homepage": "https://tomodomo.co/",
   "authors": [

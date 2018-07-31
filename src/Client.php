@@ -2,6 +2,8 @@
 
 namespace Tomodomo\PcsPhp;
 
+use function Stringy\create as s;
+
 class Client
 {
 
@@ -122,6 +124,11 @@ class Client
 		// Get the response
 		$response = $this->makeSoapCall('GetIssuesFromProfile', $header);
 
+		// Handle failures
+		if ($response['Status'] === 'Failed') {
+			throw new ClientException($this->formatErrorMessage($response['errMsg']));
+		}
+
 		return $response;
 	}
 
@@ -163,7 +170,7 @@ class Client
 
 		// If there aren't any customer numbers, return an empty array
 		if (count($numbers) < 1) {
-			throw new ClientException('No customer numbers for this email.');
+			throw new ClientException($this->formatErrorMessage($response['errMsg']));
 		}
 
 		// Extract the customer numbers
@@ -210,4 +217,14 @@ class Client
 		return $response;
 	}
 
+	/**
+	 * Format an error message
+	 *
+	 * @param string $message
+	 * @return string
+	 */
+	private function formatErrorMessage($message)
+	{
+		return (string) s($message)->toLowerCase()->upperCaseFirst();
+	}
 }
