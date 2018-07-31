@@ -83,13 +83,33 @@ class Client
 	}
 
 	/**
-	 * Check if a user is active from an email and password
+	 * Shorthand to see if a user is active
 	 *
 	 * @param string $email
 	 * @param string $password
 	 * @return bool
 	 */
 	public function isUserActive($email, $password)
+	{
+		$response = $this->authenticateUser($email, $password);
+
+		// Check the status
+		if ($response['Status'] === 'Success') {
+			return true;
+		}
+
+		// Default to returning false
+		return false;
+	}
+
+	/**
+	 * Authenticate a user given an email and password
+	 *
+	 * @param string $email
+	 * @param string $password
+	 * @return array
+	 */
+	public function authenticateUser($email, $password)
 	{
 		$args = [
 			'UserName'     => $email,
@@ -102,13 +122,7 @@ class Client
 		// Get the response
 		$response = $this->makeSoapCall('GetIssuesFromProfile', $header);
 
-		// Check the status
-		if ($response['Status'] === 'Success') {
-			return true;
-		}
-
-		// Default to returning false
-		return false;
+		return $response;
 	}
 
 	/**
@@ -188,7 +202,7 @@ class Client
 		];
 
 		// Add args/auth header
-		$header = $this->getSoapHeader('svc6CustInetAuthHeader', $args);
+		$header = $this->getSoapHeader('svc7CustInetAuthHeader', $args);
 
 		// Get the response
 		$response = $this->makeSoapCall('GetStatusAndCustInfo', $header);
