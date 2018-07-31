@@ -174,9 +174,14 @@ class Client
 		}
 
 		// Extract the customer numbers
-		$numbers = array_map(function ($number) {
-			return $number['CustomerNumber'];
-		}, $numbers);
+		if (isset($numbers['CustomerNumber'])) {
+			$numbers = [ $numbers['CustomerNumber'] ];
+		} else {
+			// Multiple items so map the array
+			$numbers = array_map(function ($number) {
+				return $number['CustomerNumber'];
+			}, $numbers);
+		}
 
 		// Return it all
 		return $numbers;
