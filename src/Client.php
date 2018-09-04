@@ -55,15 +55,25 @@ class Client
 	 */
 	public function makeSoapCall($name, $header)
 	{
-		// Make the SOAP API call to the client, with a header
-		$response = $this->client->__soapCall($name, [], [], [ $header ]);
+		try {
+			// Make the SOAP API call to the client, with a header
+			$response = $this->client->__soapCall($name, [], [], [$header]);
 
-		// Get the Result
-		// @todo this is probably v fragile
-		$response = $response->{$name . 'Result'};
+			// Get the Result
+			// @todo this is probably v fragile
+			$response = $response->{$name . 'Result'};
 
-		// Return a parsed response
-		return $this->getResponseAsArray($response);
+			// Return a parsed response
+			$response = $this->getResponseAsArray($response);
+		} catch (\SoapFault $e) {
+			// Return a failure response
+			$response = [
+				'Status' => 'Failed',
+				'errMsg' => $e->getMessage(),
+			];
+		}
+
+		return $response;
 	}
 
 	/**
